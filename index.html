@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViralYT Pro | Premium AI YouTube Suite</title>
+    <style>
+        :root { --accent: #ff004c; --bg: #0b0f1a; --card: #161b2b; --text: #e2e8f0; --secondary: #2d3748; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); margin: 0; line-height: 1.6; }
+        .container { max-width: 800px; margin: 40px auto; background: var(--card); padding: 40px; border-radius: 28px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.05); }
+        
+        /* Tabs System */
+        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--secondary); padding-bottom: 10px; }
+        .tab-link { color: #888; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.3s; }
+        .tab-link.active { color: var(--accent); border-bottom: 2px solid var(--accent); }
+        .tab-content { display: none; animation: fadeIn 0.5s; }
+        .tab-content.active { display: block; }
+
+        /* Tools Styling */
+        h1 { text-align: center; font-size: 32px; background: linear-gradient(to right, #ff004c, #ff7b00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        input { width: 100%; padding: 18px; background: #0b0f1a; border: 2px solid var(--secondary); border-radius: 14px; color: white; font-size: 16px; box-sizing: border-box; margin-bottom: 20px; }
+        .btn-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        button { padding: 15px; border: none; border-radius: 12px; background: var(--secondary); color: white; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        button:hover { background: var(--accent); transform: translateY(-2px); }
+        
+        .result-box { background: #0b0f1a; border-radius: 15px; padding: 25px; border: 1px solid var(--secondary); position: relative; min-height: 100px; }
+        .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--accent); color: white; border: none; padding: 6px 15px; border-radius: 8px; font-size: 12px; cursor: pointer; }
+
+        /* Monetization & Humanize Sections */
+        .promo-card { margin-top: 30px; padding: 20px; background: linear-gradient(45deg, #1a2235, #161b2b); border-radius: 15px; text-align: center; border: 1px solid #334155; }
+        .donate-btn { display: inline-block; background: #ffdd00; color: #000; padding: 12px 30px; border-radius: 50px; font-weight: 800; text-decoration: none; margin-top: 15px; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="tabs">
+        <div class="tab-link active" onclick="openTab(event, 'tool')">AI Tool</div>
+        <div class="tab-link" onclick="openTab(event, 'about')">About Us</div>
+        <div class="tab-link" onclick="openTab(event, 'privacy')">Privacy</div>
+        <div class="tab-link" onclick="openTab(event, 'terms')">Terms</div>
+    </div>
+
+    <div id="tool" class="tab-content active">
+        <h1>ViralYT Pro AI</h1>
+        <p style="text-align: center; color: #888;">The #1 AI Suite for US YouTube Growth</p>
+        <input type="text" id="topic" placeholder="Enter video topic for US Market...">
+        <div class="btn-grid">
+            <button onclick="generate('titles')">Viral Titles</button>
+            <button onclick="generate('desc')">SEO Description</button>
+            <button onclick="generate('tags')">Viral Tags</button>
+        </div>
+        <div id="loader" style="display:none; text-align:center; color:var(--accent); margin-bottom:10px;">⚡ AI is thinking...</div>
+        <div class="result-box">
+            <button class="copy-btn" onclick="copyText()">COPY</button>
+            <div id="output">Results will appear here...</div>
+        </div>
+
+        <div class="promo-card">
+            <p>🎁 <b>Free Support:</b> If this tool helped you, consider supporting the creator!</p>
+            <a href="https://www.buymeacoffee.com/YOUR_USERNAME" class="donate-btn">☕ Buy Me A Coffee</a>
+        </div>
+    </div>
+
+    <div id="about" class="tab-content">
+        <h2>About ViralYT Pro</h2>
+        <p>Welcome to ViralYT Pro, where we bridge the gap between AI technology and human creativity. Built specifically for the American creator economy, our tool uses advanced neural networks to analyze what makes content go viral in the US.</p>
+        <p>Our mission is to empower small creators with the same SEO power that big production houses use. Every result is crafted to sound natural, engaging, and human.</p>
+    </div>
+
+    <div id="privacy" class="tab-content">
+        <h2>Privacy Policy</h2>
+        <p>At ViralYT Pro, we take your privacy seriously. We do not store your search queries or personal data. Our tool uses Hugging Face API to process requests, and no data is shared with third parties for marketing purposes.</p>
+        <p>We use cookies only to enhance your experience and for basic analytics to improve our service.</p>
+    </div>
+
+    <div id="terms" class="tab-content">
+        <h2>Terms of Service</h2>
+        <p>By using ViralYT Pro, you agree to use our AI-generated content as a starting point. While our AI is highly accurate, we recommend reviewing all titles and descriptions to ensure they meet YouTube's Community Guidelines.</p>
+        <p>Usage is free, but automated bot scraping of this tool is prohibited.</p>
+    </div>
+</div>
+
+<script>
+    // Tab Logic
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) { tabcontent[i].style.display = "none"; }
+        tablinks = document.getElementsByClassName("tab-link");
+        for (i = 0; i < tablinks.length; i++) { tablinks[i].className = tablinks[i].className.replace(" active", ""); }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+
+    // AI Logic
+    async function generate(mode) {
+        const topic = document.getElementById('topic').value;
+        const output = document.getElementById('output');
+        const loader = document.getElementById('loader');
+        if (!topic) return alert("Please enter a topic!");
+
+        loader.style.display = "block";
+        output.style.opacity = "0.3";
+
+        const API_KEY = "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"; 
+
+        const prompts = {
+            titles: `Act as a viral YouTube consultant. Generate 5 high-CTR titles for a US audience about: ${topic}. Make them sound human, emotional, and intriguing.`,
+            desc: `Write a high-quality YouTube description for: ${topic}. Focus on the first 2 lines being a hook, followed by a professional summary for US viewers.`,
+            tags: `Provide 15 SEO tags for ${topic} separated by commas, optimized for the US search market.`
+        };
+
+        try {
+            const response = await fetch("https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2", {
+                method: "POST",
+                headers: { "Authorization": `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+                body: JSON.stringify({ inputs: `[INST] ${prompts[mode]} [/INST]`, parameters: { max_new_tokens: 500 } })
+            });
+            const data = await response.json();
+            output.innerText = data[0].generated_text.split("[/INST]").pop().trim();
+        } catch (e) {
+            output.innerText = "Error: System is busy. Try again in 1 minute.";
+        } finally {
+            loader.style.display = "none";
+            output.style.opacity = "1";
+        }
+    }
+
+    function copyText() {
+        navigator.clipboard.writeText(document.getElementById('output').innerText);
+        alert("Copied to clipboard!");
+    }
+</script>
+
+</body>
+</html>
